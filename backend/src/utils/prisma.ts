@@ -6,7 +6,8 @@ const adapter = new PrismaMariaDb({
   port: Number(process.env.DB_PORT || 3306),
   user: process.env.DB_USER || 'root',
   password: process.env.DB_PASSWORD || 'root',
-  database: process.env.DB_NAME || 'fundsroom_erp'
+  database: process.env.DB_NAME || 'fundsroom_erp',
+  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : undefined
 });
 
 const prisma = new PrismaClient({ adapter });
