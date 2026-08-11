@@ -1,34 +1,34 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Roboto:wght@300;400;500;700&display=swap');
 
 :root {
-  --font-sans: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-sans: 'Plus Jakarta Sans', 'Roboto', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   
-  /* Color Palette - Clean Corporate Light Theme (Stripe/Tailwind UI Style) */
+  /* Color Palette - Fintech Emerald & Deep Charcoal Light Theme */
   --bg-main: #f8fafc;
-  --bg-sidebar: #0f172a; /* Deep Slate sidebar for premium contrast */
+  --bg-sidebar: #111827; /* Deep Graphite Charcoal */
   --bg-card: #ffffff;
   --bg-card-hover: #ffffff;
   --border-color: #e2e8f0;
-  --border-focus: #4f46e5;
+  --border-focus: #0d9488;
   
-  --primary: #4f46e5; /* Premium Indigo */
-  --primary-hover: #4338ca;
-  --primary-glow: rgba(79, 70, 229, 0.08);
+  --primary: #0d9488; /* Fintech Emerald-Teal */
+  --primary-hover: #0f766e;
+  --primary-glow: rgba(13, 148, 136, 0.08);
   
-  --success: #0d9488; /* Teal / Emerald success tone */
+  --success: #0d9488;
   --success-glow: rgba(13, 148, 136, 0.06);
   
-  --warning: #d97706; /* Professional Amber */
+  --warning: #d97706; /* Amber Warning */
   --warning-glow: rgba(217, 119, 6, 0.06);
   
-  --danger: #dc2626; /* Crimson Red */
-  --danger-glow: rgba(220, 38, 38, 0.06);
+  --danger: #e11d48; /* Rose Red Danger */
+  --danger-glow: rgba(225, 29, 72, 0.06);
   
   --info: #0284c7; /* Sky Blue info */
   
-  --text-main: #0f172a; /* Dark Slate for main reading */
-  --text-secondary: #334155; /* Slate-700 for lists/tables */
-  --text-muted: #64748b; /* Slate-500 for captions/labels */
+  --text-main: #111827; /* Deep Graphite text */
+  --text-secondary: #374151; /* Charcoal-700 text */
+  --text-muted: #6b7280; /* Gray-500 text */
   
   --sidebar-width: 260px;
   --header-height: 70px;
