@@ -1,0 +1,144 @@
+datasource db {
+  provider = "mysql"
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  ADMIN
+  SALES
+  WAREHOUSE
+  ACCOUNTS
+}
+
+model User {
+  id             Int             @id @default(autoincrement())
+  email          String          @unique
+  password       String
+  name           String
+  role           Role
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  
+  // Relations
+  followUps      FollowUp[]
+  stockMovements StockMovement[]
+  challans       Challan[]
+}
+
+enum CustomerType {
+  RETAIL
+  WHOLESALE
+  DISTRIBUTOR
+}
+
+enum CustomerStatus {
+  LEAD
+  ACTIVE
+  INACTIVE
+}
+
+model Customer {
+  id           Int            @id @default(autoincrement())
+  name         String
+  mobile       String
+  email        String
+  businessName String
+  gstNumber    String?
+  customerType CustomerType
+  address      String         @db.Text
+  status       CustomerStatus
+  followUpDate DateTime?
+  notes        String?        @db.Text
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  // Relations
+  followUps    FollowUp[]
+  challans     Challan[]
+}
+
+model FollowUp {
+  id          Int      @id @default(autoincrement())
+  customerId  Int
+  note        String   @db.Text
+  createdById Int
+  createdAt   DateTime @default(now())
+
+  // Relations
+  customer    Customer @relation(fields: [customerId], references: [id], onDelete: Cascade)
+  createdBy   User     @relation(fields: [createdById], references: [id])
+}
+
+model Product {
+  id            Int             @id @default(autoincrement())
+  name          String
+  sku           String          @unique
+  category      String
+  unitPrice     Float
+  currentStock  Int
+  minStockAlert Int
+  location      String
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  // Relations
+  stockMovements StockMovement[]
+}
+
+enum MovementType {
+  IN
+  OUT
+}
+
+model StockMovement {
+  id              Int          @id @default(autoincrement())
+  productId       Int
+  quantityChanged Int
+  movementType    MovementType
+  reason          String
+  createdById     Int
+  timestamp       DateTime     @default(now())
+
+  // Relations
+  product         Product      @relation(fields: [productId], references: [id], onDelete: Cascade)
+  createdBy       User         @relation(fields: [createdById], references: [id])
+}
+
+enum ChallanStatus {
+  DRAFT
+  CONFIRMED
+  CANCELLED
+}
+
+model Challan {
+  id            Int              @id @default(autoincrement())
+  challanNumber String           @unique
+  customerId    Int
+  status        ChallanStatus    @default(DRAFT)
+  totalQuantity Int
+  createdById   Int
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+
+  // Relations
+  customer      Customer         @relation(fields: [customerId], references: [id])
+  createdBy     User             @relation(fields: [createdById], references: [id])
+  products      ChallanProduct[]
+}
+
+model ChallanProduct {
+  id                Int     @id @default(autoincrement())
+  challanId         Int
+  productId         Int
+  nameSnapshot      String
+  skuSnapshot       String
+  unitPriceSnapshot Float
+  quantityOrdered   Int
+  totalPrice        Float
+
+  // Relations
+  challan           Challan @relation(fields: [challanId], references: [id], onDelete: Cascade)
+}
