@@ -1,0 +1,642 @@
+{
+  "info": {
+    "_postman_id": "8b5f3db3-8f0a-4712-bc78-654dbfe713f0",
+    "name": "Fundsroom Mini ERP & CRM API",
+    "description": "API collection for testing the Mini ERP + CRM Portal endpoints including authentication, CRM customers, product inventory, and sales challans.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Authentication",
+      "item": [
+        {
+          "name": "User Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@fundsroom.com\",\n  \"password\": \"admin123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login"
+              ]
+            },
+            "description": "Authenticates a user by email and password and returns a JWT token. Roles: ADMIN (admin123), SALES (sales123), WAREHOUSE (warehouse123), ACCOUNTS (accounts123)."
+          }
+        },
+        {
+          "name": "Get Profile",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/auth/me",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "me"
+              ]
+            },
+            "description": "Retrieves the currently logged-in user profile info based on the provided JWT token."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Customer CRM",
+      "item": [
+        {
+          "name": "List Customers",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers?page=1&limit=10&search=&status=ACTIVE&type=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                },
+                {
+                  "key": "type",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Retrieves a paginated list of CRM customers with support for text search and category status/type filters."
+          }
+        },
+        {
+          "name": "Get Customer By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/customers/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers",
+                "1"
+              ]
+            },
+            "description": "Gets full details for a specific customer, including their follow-up activity logs and order history."
+          }
+        },
+        {
+          "name": "Create Customer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe Wholesalers\",\n  \"mobile\": \"9123456789\",\n  \"email\": \"jane@wholesale.com\",\n  \"businessName\": \"Jane Business Hub\",\n  \"gstNumber\": \"29BBBBB2222B2Z2\",\n  \"customerType\": \"WHOLESALE\",\n  \"address\": \"789 Industrial Area, Bangalore\",\n  \"status\": \"ACTIVE\",\n  \"followUpDate\": \"2026-09-01\",\n  \"notes\": \"Prefers email communications.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/customers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers"
+              ]
+            },
+            "description": "Registers a new customer. Requires roles: ADMIN or SALES."
+          }
+        },
+        {
+          "name": "Update Customer",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Jane Doe Wholesalers Updated\",\n  \"mobile\": \"9123456789\",\n  \"email\": \"jane@wholesale.com\",\n  \"businessName\": \"Jane Business Hub\",\n  \"gstNumber\": \"29BBBBB2222B2Z2\",\n  \"customerType\": \"WHOLESALE\",\n  \"address\": \"789 Industrial Area, Bangalore, Karnataka\",\n  \"status\": \"ACTIVE\",\n  \"followUpDate\": \"2026-09-10\",\n  \"notes\": \"Updated delivery preferences.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/customers/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers",
+                "1"
+              ]
+            },
+            "description": "Updates customer info. Requires roles: ADMIN or SALES."
+          }
+        },
+        {
+          "name": "Add Follow-up Note",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"note\": \"Discussed wholesale discounts for switches. Sent invoice draft.\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/customers/1/followups",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "customers",
+                "1",
+                "followups"
+              ]
+            },
+            "description": "Logs a new follow-up interaction note for the customer. Requires roles: ADMIN or SALES."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Inventory & Products",
+      "item": [
+        {
+          "name": "List Products",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products?page=1&limit=10&search=&category=&lowStock=false",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "category",
+                  "value": ""
+                },
+                {
+                  "key": "lowStock",
+                  "value": "false"
+                }
+              ]
+            },
+            "description": "Lists inventory products. Setting `lowStock=true` returns items where `currentStock <= minStockAlert`."
+          }
+        },
+        {
+          "name": "Get Product By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1"
+              ]
+            },
+            "description": "Retrieves product details along with its individual stock movement ledger."
+          }
+        },
+        {
+          "name": "Create Product",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Heavy Duty Gasket\",\n  \"sku\": \"HD-GASKET-01\",\n  \"category\": \"Hardware\",\n  \"unitPrice\": 45.5,\n  \"currentStock\": 80,\n  \"minStockAlert\": 15,\n  \"location\": \"Warehouse A - Shelf 5\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products"
+              ]
+            },
+            "description": "Adds a new product to the catalog and creates an initial stock movement entry. Requires roles: ADMIN or WAREHOUSE."
+          }
+        },
+        {
+          "name": "Manual Stock Adjustment",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"quantity\": 20,\n  \"movementType\": \"IN\",\n  \"reason\": \"Received supplier shipment batch #948\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/products/1/adjust-stock",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "1",
+                "adjust-stock"
+              ]
+            },
+            "description": "Performs manual stock adjustments (IN/OUT). Logs a ledger line. Stock level cannot go negative. Requires roles: ADMIN or WAREHOUSE."
+          }
+        },
+        {
+          "name": "Global Stock Movements",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/products/movements/logs?page=1&limit=20",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "products",
+                "movements",
+                "logs"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "20"
+                }
+              ]
+            },
+            "description": "Retrieves global list of all stock movements across all products. Requires roles: ADMIN, WAREHOUSE, or ACCOUNTS."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Sales Challans",
+      "item": [
+        {
+          "name": "List Challans",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/challans?page=1&limit=10&search=&status=",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "challans"
+              ],
+              "query": [
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "search",
+                  "value": ""
+                },
+                {
+                  "key": "status",
+                  "value": ""
+                }
+              ]
+            },
+            "description": "Lists all sales challans."
+          }
+        },
+        {
+          "name": "Get Challan By ID",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/challans/1",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "challans",
+                "1"
+              ]
+            },
+            "description": "Fetches details of a specific challan including customer profile, snapshot records, and total totals."
+          }
+        },
+        {
+          "name": "Create Challan",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"customerId\": 1,\n  \"status\": \"DRAFT\",\n  \"products\": [\n    {\n      \"productId\": 1,\n      \"quantityOrdered\": 5\n    },\n    {\n      \"productId\": 2,\n      \"quantityOrdered\": 2\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/challans",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "challans"
+              ]
+            },
+            "description": "Creates a new Sales Challan. If status is `CONFIRMED`, it validates stock levels (returns 400 if insufficient) and decrements stock atomically, logging `OUT` movements. Requires roles: ADMIN or SALES."
+          }
+        },
+        {
+          "name": "Update Challan Status",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{jwt_token}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"CONFIRMED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/challans/1/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "challans",
+                "1",
+                "status"
+              ]
+            },
+            "description": "Performs status transitions:\n- DRAFT -> CONFIRMED (validates and decrements stock, logs OUT)\n- CONFIRMED -> CANCELLED (restocks and logs IN)\n- DRAFT -> CANCELLED (no stock change)\nRequires roles: ADMIN, ACCOUNTS, or SALES."
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "jwt_token",
+      "value": "your_jwt_token_here",
+      "type": "string"
+    }
+  ]
+}
