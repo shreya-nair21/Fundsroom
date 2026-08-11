@@ -82,6 +82,40 @@ doc.fillColor(grayColor)
    .text('Date: August 2026', { align: 'center' })
    .text('Version: 1.0.0 (Production-Ready)', { align: 'center' });
 
+doc.moveDown(2);
+
+doc.fillColor(primaryColor)
+   .fontSize(12.5)
+   .font('Helvetica-Bold')
+   .text('Live Deployed Application Link:', { align: 'center' });
+
+doc.fillColor('#0284c7')
+   .fontSize(11)
+   .font('Helvetica-Bold')
+   .text('Frontend Client URL', { align: 'center', link: 'https://fundsroom-three-pi.vercel.app/' });
+
+doc.fillColor(grayColor)
+   .fontSize(9.5)
+   .font('Helvetica')
+   .text('(https://fundsroom-three-pi.vercel.app/)', { align: 'center' });
+
+doc.moveDown(0.8);
+
+doc.fillColor(primaryColor)
+   .fontSize(12.5)
+   .font('Helvetica-Bold')
+   .text('Live Backend API Link:', { align: 'center' });
+
+doc.fillColor('#0284c7')
+   .fontSize(11)
+   .font('Helvetica-Bold')
+   .text('Backend Server URL', { align: 'center', link: 'https://fundsroombackend-sandy.vercel.app/' });
+
+doc.fillColor(grayColor)
+   .fontSize(9.5)
+   .font('Helvetica')
+   .text('(https://fundsroombackend-sandy.vercel.app/)', { align: 'center' });
+
 // ==========================================
 // SECTION 1: ARCHITECTURE OVERVIEW
 // ==========================================
