@@ -13,49 +13,59 @@ const pdfPath = path.join(__dirname, '..', 'ERP_CRM_Documentation.pdf');
 const writeStream = fs.createWriteStream(pdfPath);
 doc.pipe(writeStream);
 
-// Helper functions for formatting
+// Helper colors
 const primaryColor = '#0d9488'; // Emerald
 const darkColor = '#1f2937'; // Charcoal
 const grayColor = '#4b5563'; // Slate gray
-const lightGray = '#f3f4f6';
+const linkColor = '#0284c7'; // Blue link
 
 function addHeader(text) {
-  doc.addPage();
+  // Check if we need a page break (prevent orphans near the page bottom)
+  if (doc.y > 650) {
+    doc.addPage();
+  } else {
+    doc.moveDown(1.5);
+  }
   doc.fillColor(primaryColor)
-     .fontSize(20)
+     .fontSize(15)
      .font('Helvetica-Bold')
-     .text(text, 50, 50);
-  doc.moveDown(1.5);
+     .text(text);
+  doc.moveDown(0.6);
 }
 
 function addSectionTitle(text) {
+  if (doc.y > 700) {
+    doc.addPage();
+  } else {
+    doc.moveDown(0.8);
+  }
   doc.fillColor(primaryColor)
-     .fontSize(14)
+     .fontSize(12)
      .font('Helvetica-Bold')
      .text(text);
-  doc.moveDown(0.5);
+  doc.moveDown(0.4);
 }
 
 function addBodyText(text) {
   doc.fillColor(darkColor)
-     .fontSize(10.5)
+     .fontSize(10)
      .font('Helvetica')
-     .text(text, { align: 'justify', lineGap: 4 });
-  doc.moveDown(1);
+     .text(text, { align: 'justify', lineGap: 3 });
+  doc.moveDown(0.6);
 }
 
 function addBullet(title, desc) {
   doc.fillColor(darkColor)
-     .fontSize(10.5)
+     .fontSize(10)
      .font('Helvetica-Bold')
      .text('  • ' + title + ': ', { continued: true })
      .font('Helvetica')
-     .text(desc, { lineGap: 3 });
-  doc.moveDown(0.4);
+     .text(desc, { lineGap: 2 });
+  doc.moveDown(0.3);
 }
 
 // ==========================================
-// TITLE PAGE
+// TITLE PAGE (Super Clean & Minimal)
 // ==========================================
 doc.rect(0, 0, 595, 842).fill('#f8fafc');
 
@@ -63,58 +73,53 @@ doc.rect(0, 0, 595, 842).fill('#f8fafc');
 doc.fillColor(primaryColor)
    .fontSize(28)
    .font('Helvetica-Bold')
-   .text('Fundsroom ERP & CRM', 50, 250, { align: 'center' });
+   .text('Fundsroom ERP & CRM', 50, 220, { align: 'center' });
 
 doc.fillColor(darkColor)
-   .fontSize(16)
+   .fontSize(15)
    .font('Helvetica')
-   .text('System Architecture & Deployment Documentation', { align: 'center' });
+   .text('Operations Portal Documentation', { align: 'center' });
 
 doc.moveDown(3);
 
-doc.rect(100, 350, 395, 4).fill(primaryColor);
+doc.rect(120, 310, 355, 3).fill(primaryColor);
 
-doc.fillColor(grayColor)
-   .fontSize(11)
-   .font('Helvetica')
-   .text('Prepared for: Technical Evaluation Board', 50, 400, { align: 'center' })
-   .text('Author: Lead Developer Agent', { align: 'center' })
-   .text('Date: August 2026', { align: 'center' })
-   .text('Version: 1.0.0 (Production-Ready)', { align: 'center' });
-
-doc.moveDown(2);
+doc.moveDown(4);
 
 doc.fillColor(primaryColor)
-   .fontSize(12.5)
+   .fontSize(12)
    .font('Helvetica-Bold')
    .text('Live Deployed Application Link:', { align: 'center' });
 
-doc.fillColor('#0284c7')
+doc.fillColor(linkColor)
    .fontSize(11)
    .font('Helvetica-Bold')
    .text('Frontend Client URL', { align: 'center', link: 'https://fundsroom-three-pi.vercel.app/' });
 
 doc.fillColor(grayColor)
-   .fontSize(9.5)
+   .fontSize(9)
    .font('Helvetica')
    .text('(https://fundsroom-three-pi.vercel.app/)', { align: 'center' });
 
-doc.moveDown(0.8);
+doc.moveDown(1);
 
 doc.fillColor(primaryColor)
-   .fontSize(12.5)
+   .fontSize(12)
    .font('Helvetica-Bold')
    .text('Live Backend API Link:', { align: 'center' });
 
-doc.fillColor('#0284c7')
+doc.fillColor(linkColor)
    .fontSize(11)
    .font('Helvetica-Bold')
    .text('Backend Server URL', { align: 'center', link: 'https://fundsroombackend-sandy.vercel.app/' });
 
 doc.fillColor(grayColor)
-   .fontSize(9.5)
+   .fontSize(9)
    .font('Helvetica')
    .text('(https://fundsroombackend-sandy.vercel.app/)', { align: 'center' });
+
+// Add Page Break for Content
+doc.addPage();
 
 // ==========================================
 // SECTION 1: ARCHITECTURE OVERVIEW
@@ -158,8 +163,6 @@ addBullet('StockMovement', 'Detailed stock ledgers logging manual increments, de
 addBullet('Challan', 'Sales records tracking client relations, status state transitions, and total calculations.');
 addBullet('ChallanProduct', 'Price-fixed transaction snapshots preserving details of sold items.');
 
-doc.moveDown(1);
-
 addSectionTitle('Seeding Initial Data');
 addBodyText(
   'A seeding script is provided to populate initial database records. This loads four default employees (representing each user role), ten initial catalog products, and five wholesale customer profiles. To execute seeding in any environment, run the database seed utility.'
@@ -181,8 +184,6 @@ addBullet('DB_HOST / DB_USER / DB_PASSWORD', 'Individual DB connection variables
 addBullet('DB_PORT / DB_NAME / DB_SSL', 'SSL activation config parameters (enable DB_SSL=true for secure cloud databases).');
 addBullet('JWT_SECRET', 'Cryptographic secret key used to sign and verify JWT authentication tokens.');
 addBullet('NODE_ENV', 'Runtime environment classifier (development or production).');
-
-doc.moveDown(1);
 
 addSectionTitle('Auto-Parsing Credentials');
 addBodyText(
@@ -230,8 +231,6 @@ addBullet('Sales Challan Billing (100% Complete)', 'Features draft saving, trans
 addBullet('Docker Deployment (100% Complete)', 'Includes Dockerfile configurations for backend and frontend.');
 addBullet('API Collection (100% Complete)', 'Includes a pre-configured Postman JSON collection for route testing.');
 
-doc.moveDown(1);
-
 addSectionTitle('Key Design Assumptions');
 addBullet('Pricing Integrity', 'Product names, SKUs, and pricing details are copied to snapshot records when confirmed. This ensures that future catalog changes do not alter historical invoices.');
 addBullet('Stock Atomicity', 'Stock decrements are validated and run within single SQL transactions to prevent negative stock quantities.');
@@ -251,8 +250,6 @@ addBullet('System Admin', 'Email: admin@fundsroom.com | Password: admin123 (Full
 addBullet('Sales Executive', 'Email: sales@fundsroom.com | Password: sales123 (CRM, Challan Drafts)');
 addBullet('Warehouse Keeper', 'Email: warehouse@fundsroom.com | Password: warehouse123 (Inventory CRUD, Logs)');
 addBullet('Accounts Manager', 'Email: accounts@fundsroom.com | Password: accounts123 (Invoices, Read-only CRM/Inventory)');
-
-doc.moveDown(1.5);
 
 addSectionTitle('API Core Endpoints (Postman)');
 addBullet('POST /api/auth/login', 'Authenticates user and returns JWT token.');
