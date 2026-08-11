@@ -5,6 +5,8 @@ A modern, responsive, role-based Full Stack ERP & CRM application built for a wh
 ---
 
 ## 🚀 Live Demo & Repository
+- **Frontend Client (UI)**: [https://fundsroom-three-pi.vercel.app/](https://fundsroom-three-pi.vercel.app/)
+- **Backend API Server**: [https://fundsroombackend-sandy.vercel.app/](https://fundsroombackend-sandy.vercel.app/)
 - **GitHub Repository**: [https://github.com/shreya-nair21/Fundsroom](https://github.com/shreya-nair21/Fundsroom)
 
 ---
